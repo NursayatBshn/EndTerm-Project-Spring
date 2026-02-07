@@ -1,0 +1,179 @@
+@startuml
+
+' Настройки стилей
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam linetype ortho
+skinparam packageStyle rectangle
+
+title EndTerm Project Architecture Class Diagram
+
+' --- Packages ---
+
+package "kz.nursayat.controller" {
+    class ClientController
+    class FreelancerController
+    class ProjectController
+    class BidController
+}
+
+package "kz.nursayat.service" {
+    class ClientService
+    class FreelancerService
+    class ProjectService
+    class BidService
+}
+
+package "kz.nursayat.repository" {
+    interface CrudRepository<T> {
+        + create(T entity)
+        + getById(int id): T
+        + getAll(): List<T>
+        + update(int id, T entity)
+        + delete(int id)
+    }
+    class ClientRepository
+    class FreelancerRepository
+    class ProjectRepository
+    class BidRepository
+}
+
+package "kz.nursayat.model" {
+    abstract class BaseEntity {
+        - id: int
+        + getId(): int
+    }
+
+    abstract class BaseUser {
+        - firstName: String
+        - lastName: String
+        - email: String
+        + {abstract} getRole(): String
+    }
+
+    class Client {
+        - registeredAt: LocalDate
+        + validate()
+    }
+
+    class Freelancer {
+        - rating: double
+        - joinedAt: LocalDate
+        - phone: String
+        + validate()
+    }
+
+    class Project {
+        - title: String
+        - budget: double
+        - createdAt: LocalDate
+        + validate()
+    }
+
+    class Bid {
+        - bidAmount: double
+        - bidDate: LocalDate
+        + validate()
+    }
+
+    ' Builder Pattern Representation
+    class "Client.Builder" as ClientBuilder <<Builder>>
+    class "Freelancer.Builder" as FreelancerBuilder <<Builder>>
+    class "Project.Builder" as ProjectBuilder <<Builder>>
+    class "Bid.Builder" as BidBuilder <<Builder>>
+}
+
+package "kz.nursayat.model.interfaces" {
+    interface Validatable<T> {
+        + validate()
+    }
+    interface Payable {
+        + getAmount(): double
+    }
+}
+
+package "kz.nursayat.patterns" {
+    class UserFactory <<Factory>> {
+        + {static} createUser(type: String): BaseUser
+    }
+
+    class LoggingService <<Singleton>> {
+        - {static} instance: LoggingService
+        - LoggingService()
+        + {static} getInstance(): LoggingService
+        + log(message: String)
+    }
+}
+
+package "kz.nursayat.utils" {
+    class ValidationUtils <<Utility>> {
+        + {static} checkString(val, name)
+        + {static} checkRange(val, min, max, name)
+        + {static} checkEmail(email)
+    }
+}
+
+' --- Relationships ---
+
+' Inheritance (Model)
+BaseEntity <|-- BaseUser
+BaseEntity <|-- Project
+BaseEntity <|-- Bid
+BaseUser <|-- Client
+BaseUser <|-- Freelancer
+
+' Realization (Interfaces)
+Validatable <|.. Client
+Validatable <|.. Freelancer
+Validatable <|.. Project
+Validatable <|.. Bid
+Payable <|.. Project
+Payable <|.. Bid
+
+' Builder nesting
+Client +-- ClientBuilder
+Freelancer +-- FreelancerBuilder
+Project +-- ProjectBuilder
+Bid +-- BidBuilder
+
+' Associations (Model Relations)
+Project "1" o-- "1" Client : has >
+Bid "1" o-- "1" Project : on >
+Bid "1" o-- "1" Freelancer : by >
+
+' Repository Implementation
+CrudRepository <|.. ClientRepository
+CrudRepository <|.. FreelancerRepository
+CrudRepository <|.. ProjectRepository
+CrudRepository <|.. BidRepository
+
+' Controller -> Service -> Repository
+ClientController --> ClientService
+ClientService --> ClientRepository
+
+FreelancerController --> FreelancerService
+FreelancerService --> FreelancerRepository
+
+ProjectController --> ProjectService
+ProjectService --> ProjectRepository
+ProjectService --> ClientRepository : verifies Client >
+
+BidController --> BidService
+BidService --> BidRepository
+
+' Patterns Usage
+ClientController ..> UserFactory : uses
+FreelancerController ..> UserFactory : uses
+
+ClientService ..> LoggingService : uses
+FreelancerService ..> LoggingService : uses
+ProjectService ..> LoggingService : uses
+BidService ..> LoggingService : uses
+
+' Utils Usage
+Client ..> ValidationUtils
+Freelancer ..> ValidationUtils
+Project ..> ValidationUtils
+Bid ..> ValidationUtils
+
+@enduml
