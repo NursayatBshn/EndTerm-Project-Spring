@@ -4,7 +4,7 @@ import kz.nursayat.exception.InvalidInputException;
 import kz.nursayat.exception.ResourceNotFoundException;
 import kz.nursayat.model.Freelancer;
 import kz.nursayat.patterns.LoggingService;
-import kz.nursayat.patterns.CacheManager;
+import kz.nursayat.cache.CacheManager;
 import kz.nursayat.repository.FreelancerRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;

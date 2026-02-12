@@ -3,7 +3,7 @@ package kz.nursayat.service;
 import kz.nursayat.exception.InvalidInputException;
 import kz.nursayat.exception.ResourceNotFoundException;
 import kz.nursayat.model.Client;
-import kz.nursayat.patterns.CacheManager;
+import kz.nursayat.cache.CacheManager;
 import kz.nursayat.patterns.LoggingService;
 import kz.nursayat.repository.ClientRepository;
 import org.springframework.stereotype.Service;

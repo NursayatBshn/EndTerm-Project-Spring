@@ -1,4 +1,4 @@
-package kz.nursayat.patterns;
+package kz.nursayat.cache;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

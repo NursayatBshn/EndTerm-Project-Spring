@@ -2,7 +2,7 @@ package kz.nursayat.service;
 
 import kz.nursayat.exception.ResourceNotFoundException;
 import kz.nursayat.model.Project;
-import kz.nursayat.patterns.CacheManager;
+import kz.nursayat.cache.CacheManager;
 import kz.nursayat.patterns.LoggingService;
 import kz.nursayat.repository.ClientRepository;
 import kz.nursayat.repository.ProjectRepository;

@@ -7,7 +7,7 @@ import kz.nursayat.exception.ResourceNotFoundException;
 import kz.nursayat.model.Bid;
 import kz.nursayat.repository.BidRepository;
 import kz.nursayat.patterns.LoggingService;
-import kz.nursayat.patterns.CacheManager;
+import kz.nursayat.cache.CacheManager;
 
 import java.util.List;
 
@@ -45,7 +45,7 @@ public class BidService {
 
     public List<Bid> getAll() {
         List<Bid> cached = (List<Bid>) cacheManager.get(CACHE_KEY);
-        if (cached != null) {
+        if (cached != null)  {
             logger.log("Returning bids from cache");
             return cached;
         }
