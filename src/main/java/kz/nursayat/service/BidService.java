@@ -3,10 +3,11 @@ package kz.nursayat.service;
 import org.springframework.stereotype.Service;
 import kz.nursayat.exception.DuplicateResourceException;
 import kz.nursayat.exception.InvalidInputException;
-import kz.nursayat.exception.ResourceNotFoundException; // Добавлено
+import kz.nursayat.exception.ResourceNotFoundException;
 import kz.nursayat.model.Bid;
 import kz.nursayat.repository.BidRepository;
-import kz.nursayat.patterns.LoggingService; // Наш Singleton
+import kz.nursayat.patterns.LoggingService;
+import kz.nursayat.patterns.CacheManager;
 
 import java.util.List;
 
@@ -14,6 +15,8 @@ import java.util.List;
 public class BidService {
     private final BidRepository repository;
     private final LoggingService logger = LoggingService.getInstance();
+    private final CacheManager cacheManager = CacheManager.getInstance();
+    private final String CACHE_KEY = "bids_all";
 
     public BidService(BidRepository repository) {
         this.repository = repository;
@@ -37,10 +40,21 @@ public class BidService {
 
         repository.create(bid);
         logger.log("Bid created successfully for project " + projectId);
+        cacheManager.clearAll();
     }
 
     public List<Bid> getAll() {
-        return repository.getAll();
+        List<Bid> cached = (List<Bid>) cacheManager.get(CACHE_KEY);
+        if (cached != null) {
+            logger.log("Returning bids from cache");
+            return cached;
+        }
+
+        logger.log("Cache miss. Fetching bids from database");
+        List<Bid> bids = repository.getAll();
+
+        cacheManager.put(CACHE_KEY, bids);
+        return bids;
     }
 
     public Bid getById(int id) {
@@ -56,11 +70,13 @@ public class BidService {
         bid.validate();
         logger.log("Updating bid with id: " + id);
         repository.update(id, bid);
+        cacheManager.clearAll();
     }
 
     public void delete(int id) {
         getById(id);
         logger.log("Deleting bid with id: " + id);
         repository.delete(id);
+        cacheManager.clearAll();
     }
 }
