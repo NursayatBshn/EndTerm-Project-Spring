@@ -127,7 +127,6 @@ public class BidRepository implements CrudRepository<Bid> {
         }
     }
     private Bid mapRowToBid(ResultSet rs) throws SQLException {
-        // Собираем связанный проект через его Builder
         Project project = new Project.Builder()
                 .id(rs.getInt("project_id"))
                 .title(rs.getString("title"))
@@ -135,7 +134,6 @@ public class BidRepository implements CrudRepository<Bid> {
                 .createdAt(rs.getDate("created_at").toLocalDate())
                 .build();
 
-        // Собираем связанного фрилансера через его конструктор/будущий Builder
         Freelancer freelancer = new Freelancer(
                 rs.getInt("freelancer_id"),
                 rs.getString("first_name"),
@@ -146,7 +144,6 @@ public class BidRepository implements CrudRepository<Bid> {
                 rs.getString("phone")
         );
 
-        // Собираем сам Bid через Builder
         return new Bid.Builder()
                 .id(rs.getInt("bid_id"))
                 .bidAmount(rs.getDouble("bid_amount"))

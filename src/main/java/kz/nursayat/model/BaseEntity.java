@@ -10,8 +10,6 @@ public abstract class BaseEntity {
     public abstract String getEntityName();
     public abstract String getFullDescription();
 
-    // Метод printInfo удален как нарушение чистоты архитектуры
-
     public int getId() {
         return id;
     }

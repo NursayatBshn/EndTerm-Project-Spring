@@ -38,7 +38,7 @@ public class FreelancerRepository implements CrudRepository<Freelancer> {
     }
 
     @Override
-    public List<Freelancer> getAll() { // Название строго по интерфейсу
+    public List<Freelancer> getAll() {
         List<Freelancer> freelancers = new ArrayList<>();
         String sql = "SELECT * FROM freelancers";
         try (Connection conn = dataSource.getConnection();
@@ -54,7 +54,7 @@ public class FreelancerRepository implements CrudRepository<Freelancer> {
     }
 
     @Override
-    public Freelancer getById(int id) { // Название строго по интерфейсу
+    public Freelancer getById(int id) {
         String sql = "SELECT * FROM freelancers WHERE freelancer_id = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -77,7 +77,7 @@ public class FreelancerRepository implements CrudRepository<Freelancer> {
             ps.setString(1, email);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return mapRowToFreelancer(rs); // Использует наш Builder [cite: 25-31]
+                    return mapRowToFreelancer(rs);
                 }
             }
             return null;
@@ -87,7 +87,7 @@ public class FreelancerRepository implements CrudRepository<Freelancer> {
     }
 
     @Override
-    public void update(int id, Freelancer freelancer) { // Сигнатура по интерфейсу (int, T)
+    public void update(int id, Freelancer freelancer) {
         String sql = "UPDATE freelancers SET first_name = ?, last_name = ?, email = ?, rating = ?, phone = ? WHERE freelancer_id = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -120,7 +120,6 @@ public class FreelancerRepository implements CrudRepository<Freelancer> {
     }
 
     private Freelancer mapRowToFreelancer(ResultSet rs) throws SQLException {
-        // Сборка объекта через Builder для выполнения требований Endterm
         return new Freelancer.Builder()
                 .id(rs.getInt("freelancer_id"))
                 .firstName(rs.getString("first_name"))

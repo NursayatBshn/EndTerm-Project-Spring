@@ -13,7 +13,6 @@ public class ErrorResponse {
         this.status = status;
     }
 
-    // Геттеры нужны для того, чтобы Spring мог превратить объект в JSON
     public LocalDateTime getTimestamp() { return timestamp; }
     public String getMessage() { return message; }
     public int getStatus() { return status; }

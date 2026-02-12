@@ -9,14 +9,12 @@ public class Project extends BaseEntity implements Validatable<Project>, Payable
     private String title;
     private double budget;
     private LocalDate createdAt;
-    private Client client; // Объект клиента, как в вашем оригинале
+    private Client client;
 
-    // Конструктор по умолчанию для Builder и Spring
     public Project() {
         super(0);
     }
 
-    // Конструктор из вашего оригинального кода
     public Project(int id, String title, double budget, LocalDate createdAt, Client client) {
         super(id);
         this.title = title;
@@ -27,7 +25,7 @@ public class Project extends BaseEntity implements Validatable<Project>, Payable
 
     @Override
     public String getEntityName() {
-        return title; // Метод родителя возвращает заголовок
+        return title;
     }
 
     @Override
@@ -54,7 +52,6 @@ public class Project extends BaseEntity implements Validatable<Project>, Payable
         }
     }
 
-    // Геттеры и сеттеры (включая getClient)
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
 
@@ -67,7 +64,6 @@ public class Project extends BaseEntity implements Validatable<Project>, Payable
     public Client getClient() { return client; } // Тот самый метод, который я пропустил
     public void setClient(Client client) { this.client = client; }
 
-    // --- ПАТТЕРН BUILDER ДЛЯ ENDTERM ---
     public static class Builder {
         private final Project project = new Project();
 

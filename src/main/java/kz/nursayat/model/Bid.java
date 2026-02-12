@@ -11,12 +11,10 @@ public class Bid extends BaseEntity implements Validatable<Bid>, Payable {
     private double bidAmount;
     private LocalDate bidDate;
 
-    // Конструктор по умолчанию для Spring и Builder
     public Bid() {
         super(0);
     }
 
-    // Оригинальный конструктор
     public Bid(int id, Project project, Freelancer freelancer, double bidAmount, LocalDate bidDate) {
         super(id);
         this.project = project;
@@ -27,7 +25,6 @@ public class Bid extends BaseEntity implements Validatable<Bid>, Payable {
 
     @Override
     public String getEntityName() {
-        // Используем метод родителя у связанного проекта
         return "Bid for " + (project != null ? project.getEntityName() : "Unknown Project");
     }
 
@@ -56,7 +53,6 @@ public class Bid extends BaseEntity implements Validatable<Bid>, Payable {
         }
     }
 
-    // Геттеры и сеттеры
     public Project getProject() { return project; }
     public void setProject(Project project) { this.project = project; }
 
@@ -69,7 +65,6 @@ public class Bid extends BaseEntity implements Validatable<Bid>, Payable {
     public LocalDate getBidDate() { return bidDate; }
     public void setBidDate(LocalDate bidDate) { this.bidDate = bidDate; }
 
-    // --- ПАТТЕРН BUILDER ДЛЯ ENDTERM ---
     public static class Builder {
         private final Bid bid = new Bid();
 

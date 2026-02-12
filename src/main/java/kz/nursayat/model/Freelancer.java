@@ -8,16 +8,14 @@ public class Freelancer extends BaseUser implements Validatable<Freelancer> {
     private LocalDate joinedAt;
     private String phone;
 
-    // Конструктор по умолчанию (для Spring и Builder)
     public Freelancer() {
-        super(0, "", "", ""); // Строго 4 аргумента согласно BaseUser.java
+        super(0, "", "", "");
         this.joinedAt = LocalDate.now();
     }
 
-    // Конструктор со всеми полями (7 аргументов: 4 в родитель, 3 здесь)
     public Freelancer(int id, String firstName, String lastName, String email,
                       double rating, LocalDate joinedAt, String phone) {
-        super(id, firstName, lastName, email); // Вызов BaseUser(int, String, String, String)
+        super(id, firstName, lastName, email);
         this.rating = rating;
         this.joinedAt = joinedAt;
         this.phone = phone;
@@ -35,16 +33,13 @@ public class Freelancer extends BaseUser implements Validatable<Freelancer> {
 
     @Override
     public void validate() {
-        // Используем наш новый пакет utils
         kz.nursayat.utils.ValidationUtils.checkString(getFirstName(), "First name");
         kz.nursayat.utils.ValidationUtils.checkString(getLastName(), "Last name");
         kz.nursayat.utils.ValidationUtils.checkEmail(getEmail());
 
-        // Используем проверку диапазона для рейтинга
         kz.nursayat.utils.ValidationUtils.checkRange(rating, 0.0, 5.0, "Rating");
     }
 
-    // Геттеры и сеттеры для специфичных полей
     public double getRating() { return rating; }
     public void setRating(double rating) { this.rating = rating; }
 
@@ -54,7 +49,6 @@ public class Freelancer extends BaseUser implements Validatable<Freelancer> {
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
 
-    // --- ПАТТЕРН BUILDER ---
     public static class Builder {
         private final Freelancer freelancer = new Freelancer();
 

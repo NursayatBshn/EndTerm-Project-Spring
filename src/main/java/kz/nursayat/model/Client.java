@@ -4,28 +4,23 @@ import kz.nursayat.model.interfaces.Validatable;
 import java.time.LocalDate;
 
 public class Client extends BaseUser implements Validatable<Client> {
-    // Поле registeredAt перенесено сюда, так как его нет в BaseUser
     private LocalDate registeredAt;
 
-    // Конструктор по умолчанию для Builder и Spring
     public Client() {
         super(0, "", "", "");
         this.registeredAt = LocalDate.now();
     }
 
-    // Исправленный конструктор: 4 аргумента в super() и 1 для текущего класса
     public Client(int id, String firstName, String lastName, String email, LocalDate registeredAt) {
-        super(id, firstName, lastName, email); // Строго 4 аргумента согласно BaseUser.java
+        super(id, firstName, lastName, email);
         this.registeredAt = registeredAt;
     }
 
-    // Реализация обязательного метода из BaseUser
     @Override
     public String getRole() {
         return "Client";
     }
 
-    // Геттер и сеттер для registeredAt (теперь они существуют в классе)
     public LocalDate getRegisteredAt() {
         return registeredAt;
     }
@@ -41,7 +36,6 @@ public class Client extends BaseUser implements Validatable<Client> {
         kz.nursayat.utils.ValidationUtils.checkEmail(getEmail());
     }
 
-    // --- ПАТТЕРН BUILDER ---
     public static class Builder {
         private final Client client = new Client();
 

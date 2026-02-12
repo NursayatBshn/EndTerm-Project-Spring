@@ -39,15 +39,21 @@ public class FreelancerService {
         return freelancer;
     }
 
+    public Freelancer getByEmail(String email) {
+        Freelancer freelancer = repository.findByEmail(String.valueOf(email));
+        if (freelancer == null) {
+            throw new ResourceNotFoundException("Freelancer not found with email: " + email);
+        }
+        return freelancer;
+    }
+
     public void update(int id, Freelancer freelancer) {
-        getById(id); // Проверка существования (выбросит 404 если нет)
         freelancer.validate();
         logger.log("Updating freelancer ID: " + id);
         repository.update(id, freelancer);
     }
 
     public void delete(int id) {
-        getById(id); // Проверка существования
         logger.log("Deleting freelancer ID: " + id);
         repository.delete(id);
     }

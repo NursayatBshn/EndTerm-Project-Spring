@@ -37,7 +37,7 @@ public class ProjectRepository implements CrudRepository<Project> {
     }
 
     @Override
-    public List<Project> getAll() { // Сигнатура по вашему интерфейсу
+    public List<Project> getAll() {
         List<Project> projects = new ArrayList<>();
         String sql = "SELECT p.project_id, p.title, p.budget, p.created_at, " +
                 "c.client_id, c.first_name, c.last_name, c.email, c.registered_at " +
@@ -55,7 +55,7 @@ public class ProjectRepository implements CrudRepository<Project> {
     }
 
     @Override
-    public Project getById(int id) { // Сигнатура по вашему интерфейсу
+    public Project getById(int id) {
         String sql = "SELECT p.project_id, p.title, p.budget, p.created_at, " +
                 "c.client_id, c.first_name, c.last_name, c.email, c.registered_at " +
                 "FROM projects p JOIN clients c ON p.client_id = c.client_id " +
@@ -75,7 +75,7 @@ public class ProjectRepository implements CrudRepository<Project> {
     }
 
     @Override
-    public void update(int id, Project project) { // Два аргумента, как в интерфейсе
+    public void update(int id, Project project) {
         String sql = "UPDATE projects SET title = ?, budget = ? WHERE project_id = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -105,7 +105,6 @@ public class ProjectRepository implements CrudRepository<Project> {
     }
 
     private Project mapRowToProject(ResultSet rs) throws SQLException {
-        // Сначала собираем клиента, как в вашем репозитории [cite: 16]
         Client client = new Client(
                 rs.getInt("client_id"),
                 rs.getString("first_name"),
@@ -114,7 +113,6 @@ public class ProjectRepository implements CrudRepository<Project> {
                 rs.getDate("registered_at").toLocalDate()
         );
 
-        // Затем собираем проект через Builder (требование Endterm) [cite: 1, 25-31]
         return new Project.Builder()
                 .id(rs.getInt("project_id"))
                 .title(rs.getString("title"))

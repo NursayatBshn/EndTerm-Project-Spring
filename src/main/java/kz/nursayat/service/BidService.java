@@ -13,7 +13,6 @@ import java.util.List;
 @Service
 public class BidService {
     private final BidRepository repository;
-    // Получаем экземпляр синглтона для соблюдения требований раздела 1.A
     private final LoggingService logger = LoggingService.getInstance();
 
     public BidService(BidRepository repository) {
@@ -25,12 +24,12 @@ public class BidService {
             throw new InvalidInputException("Bid cannot be null");
         }
 
-        bid.validate(); // SOLID: Валидация перед бизнес-логикой [cite: 61]
+        bid.validate();
 
         int projectId = bid.getProject().getId();
         int freelancerId = bid.getFreelancer().getId();
 
-        logger.log("Checking for duplicate bid for project " + projectId); // Используем Singleton
+        logger.log("Checking for duplicate bid for project " + projectId);
 
         if (repository.existsByProjectAndFreelancer(projectId, freelancerId)) {
             throw new DuplicateResourceException("Freelancer has already placed a bid for this project");
@@ -47,21 +46,20 @@ public class BidService {
     public Bid getById(int id) {
         Bid bid = repository.getById(id);
         if (bid == null) {
-            // Критически важно для корректных REST ответов
             throw new ResourceNotFoundException("Bid not found with id: " + id);
         }
         return bid;
     }
 
     public void update(int id, Bid bid) {
-        getById(id); // Сначала проверяем существование, чтобы выкинуть 404 если надо
+        getById(id);
         bid.validate();
         logger.log("Updating bid with id: " + id);
         repository.update(id, bid);
     }
 
     public void delete(int id) {
-        getById(id); // Проверяем существование перед удалением [cite: 49]
+        getById(id);
         logger.log("Deleting bid with id: " + id);
         repository.delete(id);
     }

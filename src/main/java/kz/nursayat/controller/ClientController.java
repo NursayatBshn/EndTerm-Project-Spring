@@ -18,13 +18,12 @@ public class ClientController {
         this.clientService = clientService;
     }
 
-    // CREATE (Используем Factory + Builder)
+    // CREATE
     @PostMapping
     public String addClient(@RequestBody Client request) {
-        // Фабрика создает пустой объект нужного типа
-        Client client = (Client) UserFactory.createUser("CLIENT");
+        UserFactory.createUser("CLIENT");
+        Client client;
 
-        // Builder наполняет его данными [cite: 1, 27-33]
         client = new Client.Builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -48,18 +47,22 @@ public class ClientController {
         return clientService.getById(id);
     }
 
-    // UPDATE (Обновление)
+    // READ BY EMAIL
+    @GetMapping("/{email}")
+    public Client getClientById(@PathVariable String email) {
+        return clientService.getByEmail(email);
+    }
+
+    // UPDATE
     @PutMapping("/{id}")
     public String updateClient(@PathVariable int id, @RequestBody Client request) {
-        // Для обновления мы передаем ID и объект с новыми данными [cite: 1, 19]
         clientService.update(id, request);
         return "Client with ID " + id + " updated successfully!";
     }
 
-    // DELETE (Удаление)
+    // DELETE
     @DeleteMapping("/{id}")
     public String deleteClient(@PathVariable int id) {
-        // Удаление происходит по ID [cite: 1, 20]
         clientService.delete(id);
         return "Client with ID " + id + " deleted successfully!";
     }

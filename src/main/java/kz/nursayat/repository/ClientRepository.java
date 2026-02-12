@@ -36,7 +36,7 @@ public class ClientRepository implements CrudRepository<Client> {
     }
 
     @Override
-    public List<Client> getAll() { // Сигнатура согласно вашему CrudRepository
+    public List<Client> getAll() {
         List<Client> clients = new ArrayList<>();
         String sql = "SELECT * FROM clients";
         try (Connection conn = dataSource.getConnection();
@@ -52,7 +52,7 @@ public class ClientRepository implements CrudRepository<Client> {
     }
 
     @Override
-    public Client getById(int id) { // Сигнатура согласно вашему CrudRepository
+    public Client getById(int id) {
         String sql = "SELECT * FROM clients WHERE client_id = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -75,17 +75,17 @@ public class ClientRepository implements CrudRepository<Client> {
             ps.setString(1, email);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return mapRowToClient(rs); // Использует наш Builder [cite: 25-31]
+                    return mapRowToClient(rs);
                 }
             }
-            return null; // Возвращаем null, если не нашли (обработаем в сервисе)
+            return null;
         } catch (SQLException e) {
             throw new DatabaseOperationException("Error finding client by email", e);
         }
     }
 
     @Override
-    public void update(int id, Client client) { // Сигнатура согласно вашему CrudRepository (int id, T entity)
+    public void update(int id, Client client) {
         String sql = "UPDATE clients SET first_name = ?, last_name = ?, email = ? WHERE client_id = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {

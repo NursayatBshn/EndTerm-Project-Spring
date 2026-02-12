@@ -11,7 +11,6 @@ import java.util.List;
 
 @Service
 public class ClientService {
-    // ИСПРАВЛЕНИЕ 1: Используем конкретный репозиторий, чтобы был доступен метод findByEmail
     private final ClientRepository repository;
     private final LoggingService logger = LoggingService.getInstance();
 
@@ -43,7 +42,6 @@ public class ClientService {
 
     public Client getByEmail(String email) {
         logger.log("Searching for client with email: " + email);
-        // ИСПРАВЛЕНИЕ 2: Теперь этот вызов работает корректно
         Client client = repository.findByEmail(email);
         if (client == null) {
             throw new ResourceNotFoundException("Client not found with email: " + email);
@@ -52,14 +50,14 @@ public class ClientService {
     }
 
     public void update(int id, Client client) {
-        getById(id); // Проверка существования
+        getById(id);
         client.validate();
         logger.log("Updating client ID: " + id);
         repository.update(id, client);
     }
 
     public void delete(int id) {
-        getById(id); // Проверка существования
+        getById(id);
         logger.log("Deleting client ID: " + id);
         repository.delete(id);
     }
